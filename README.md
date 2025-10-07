@@ -1,6 +1,6 @@
 # Mendelian randomization analysis using GWAS and eQTL data to investigate the relationship between chronotype and neuropsychiatric disorders and their molecular basis
 
-This repository outlines the Mendelain randomisation analyses I completed during my PhD, leading to a publication in American Journal of Medical Genetics (2024). 
+This repository outlines the Mendelian Randomisation analyses I completed during my PhD, leading to a publication in American Journal of Medical Genetics (2024). 
 
 *Abstract:*
 
