@@ -2,7 +2,7 @@
 
 # Shane Crinion / shanecrinion@gmail.com / s.crinion1@nuigalway.ie
 # 10-2-2022
-# This script processes ugly non-standard QTL summary stats and formats for TwoSampleMR
+# This script cleans ugly non-standard QTL summary stats and formats for TwoSampleMR
 
 # PROCESSES & OUTPUTS
 # - clean and tidy QTL sumstats
