@@ -17,7 +17,6 @@
 # ├── collect data name, description, source & significant loci counts
 # output: metadata file for datasets used
 
-setwd('~/Desktop/files/data/')
 
 # import libraries
 suppressPackageStartupMessages({
@@ -49,28 +48,5 @@ exposure_data <- read_exposure_data("PGC3-supp/EU/daner_PGC_SCZ_w3_90_0518d_eur.
                      effect_allele_col = "A1", other_allele_col = "A2", 
                      eaf_col = "FRQ_A_53386",   pval_col = "P")
 exposure_data$beta.exposure <- log(exposure_data$beta.exposure) # use log(OR)for binary traits
-
-
-## test comment
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# # import data
-# QTL <- fread('psychencode/psychencode_Full_hg19_cis-QTL.txt.gz',sep = ' ')
-# colnames(QTL) <- names(fread("psychencode/DER-08b_hg19_QTL.bonferroni.txt", sep="\t"))[1:14]
-# QTL.lookup <- fread('~/Desktop/files/data/eqtl/psychencode/SNP_Information_Table_with_Alleles.txt', sep="\t")
-# QTL.sig <- subset(QTL, nominal_pval < 5e-8)
-# 
 
 
