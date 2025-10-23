@@ -2,7 +2,7 @@
 
 # Shane Crinion / shanecrinion@gmail.com / s.crinion1@nuigalway.ie
 # 10-2-2022
-# This script cleans ugly non-standard QTL summary stats and formats for TwoSampleMR
+# This script cleans non-standardised QTL summary stats and formats for TwoSampleMR
 
 # PROCESSES & OUTPUTS
 # - clean and tidy QTL sumstats
@@ -27,21 +27,19 @@
 # ├── Whole Blood  ✓
 
 
-# import libraries
+# Libraries
 suppressPackageStartupMessages({
-   library(data.table) # import data
+   library(data.table) 
    library(TwoSampleMR)})
 
-setwd('~/Desktop/files/data/eqtl/')
-
-# set up metadata file
+# Create object of meta-data 
 header <- paste("data", "region", "individuals","individuals.descr",
                 "count.variants","count.5e-8","count.duplicated",
                 "snp.gene.pairs","snps.unique",
                 "genes.unique", "source", "data.description", sep = ',')
 write(header,file="metadata.csv", append=TRUE)
 
-# wrtie function to write meta-data
+# Write function to write meta-data
 write_metadata <- function(){
    line <- paste(name, region, individuals,  individuals_descr, 
                  count.variants, count.sig, count.duplicated, 
@@ -50,7 +48,7 @@ write_metadata <- function(){
    write(line,file="metadata.csv", append=TRUE)}
 
 ## 1. PSYCHencode 
-# info for metadata file
+# Info for metadata file
 name <- "PSYCHencode"
 region <- "prefrontal cortex"
 individuals <- 1387
@@ -58,8 +56,7 @@ individuals_descr <- "Filtered adult samples with matching gene expression and g
 data_descr <-  "Full set of cis-eQTLs with no p-value or FDR filtering"
 source <- "http://resource.psychencode.org/Datasets/Derived/QTLs/Full_hg19_cis-QTL.txt.gz"
 
-
-# import data
+# Import data
 QTL <- fread('psychencode/psychencode_Full_hg19_cis-QTL.txt.gz',sep = ' ')
 colnames(QTL) <- names(fread("psychencode/DER-08b_hg19_QTL.bonferroni.txt", sep="\t"))[1:14]
 QTL.lookup <- fread('psychencode/SNP_Information_Table_with_Alleles.txt', sep="\t")
@@ -113,7 +110,7 @@ count.genes.unique <- length(unique(exposure_data$entrez))
 # write metadata to file
 write_metadata()
 
-#2. GTEx 
+# 2. GTEx 
 # CORTEX
 # info for metadata file
 name <- "GTEx Analysis V7"
