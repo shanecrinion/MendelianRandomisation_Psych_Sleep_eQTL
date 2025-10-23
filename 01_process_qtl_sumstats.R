@@ -35,11 +35,18 @@ suppressPackageStartupMessages({
 setwd('~/Desktop/files/data/eqtl/')
 
 # set up metadata file
-header <- paste("data", "region", "individuals","individuals.descr","count.variants","count.5e-8","count.duplicated","snp.gene.pairs","snps.unique", "genes.unique", "source", "data.description", sep = ',')
+header <- paste("data", "region", "individuals","individuals.descr",
+                "count.variants","count.5e-8","count.duplicated",
+                "snp.gene.pairs","snps.unique",
+                "genes.unique", "source", "data.description", sep = ',')
 write(header,file="metadata.csv", append=TRUE)
 
+# wrtie function to write meta-data
 write_metadata <- function(){
-   line <- paste(name, region, individuals,  individuals_descr, count.variants, count.sig, count.duplicated, count.snps, count.snps.unique, count.genes.unique, source, data_descr, sep=",")
+   line <- paste(name, region, individuals,  individuals_descr, 
+                 count.variants, count.sig, count.duplicated, 
+                 count.snps, count.snps.unique, 
+                 count.genes.unique, source, data_descr, sep=",")
    write(line,file="metadata.csv", append=TRUE)}
 
 ## 1. PSYCHencode 
@@ -55,7 +62,7 @@ source <- "http://resource.psychencode.org/Datasets/Derived/QTLs/Full_hg19_cis-Q
 # import data
 QTL <- fread('psychencode/psychencode_Full_hg19_cis-QTL.txt.gz',sep = ' ')
 colnames(QTL) <- names(fread("psychencode/DER-08b_hg19_QTL.bonferroni.txt", sep="\t"))[1:14]
-QTL.lookup <- fread('~/Desktop/files/data/eqtl/psychencode/SNP_Information_Table_with_Alleles.txt', sep="\t")
+QTL.lookup <- fread('psychencode/SNP_Information_Table_with_Alleles.txt', sep="\t")
 QTL.sig <- subset(QTL, nominal_pval < 5e-8)
 
 # get RSID and alleles for remaining SNPs
@@ -230,10 +237,10 @@ data_descr <-  "Right cerebral frontal pole cortex (sampled at donor collection 
 source <- "https://gtexportal.org/home/datasets"
 
 # import data
-QTL <- fread('~/Desktop/files/data/gtexv8/Brain_Cortex.allpairs.txt.gz',sep = '\t')
+QTL <- fread('gtexv8/Brain_Cortex.allpairs.txt.gz',sep = '\t')
 QTL.sig <- subset(QTL, pval_nominal < 5e-8)
 rm(QTL)
-QTL.lookup <- fread('~/Desktop/files/data/gtexv8/GTEx_Analysis_2017-06-05_v8_WholeGenomeSeq_838Indiv_Analysis_Freeze.lookup_table.txt.gz', sep="\t")
+QTL.lookup <- fread('gtexv8/GTEx_Analysis_2017-06-05_v8_WholeGenomeSeq_838Indiv_Analysis_Freeze.lookup_table.txt.gz', sep="\t")
 head(QTL.lookup)
 
 # get RSID and alleles for remaining SNPs
@@ -277,9 +284,13 @@ count.snps.unique <- length(unique(exposure_data$SNP))
 count.genes.unique <- length(unique(exposure_data$entrez))
 
 rm(QTL, QTL.lookup, QTL.sig)
+
 write_metadata()
-rm(count.duplicated, count.genes.unique, count.sig, count.snps, count.snps.unique, count.variants, data_descr, individuals, individuals_descr, name,
-   region, source)
+
+rm(count.duplicated, count.genes.unique, count.sig, 
+   count.snps, count.snps.unique, count.variants, 
+   data_descr, individuals, individuals_descr, 
+   name, region, source)
 rm(exposure_data)
 
 # Hippocampus
@@ -297,13 +308,11 @@ QTL <- fread('~/Desktop/files/data/gtexv8/Brain_Hippocampus.allpairs.txt.gz',sep
 count.variants <- dim(QTL)[1] 
 QTL.sig <- subset(QTL, pval_nominal < 5e-8)
 rm(QTL)
-#.rs.restartR() # remove large QTL file from memory
 #write.csv(QTL.sig, file = 'Brain_Hippocampus.allpairs.p5e-8.csv')
-# restart R here
-#QTL.sig <- read.csv('Brain_Hippocampus.allpairs.p5e-8.csv')
+#.rs.restartR() # remove large QTL file from memory
 
-#QTL.lookup <- fread('~/Desktop/files/data/gtexv8/GTEx_Analysis_2017-06-05_v8_WholeGenomeSeq_838Indiv_Analysis_Freeze.lookup_table.txt.gz', sep="\t")
-head(QTL.lookup)
+#QTL.sig <- read.csv('Brain_Hippocampus.allpairs.p5e-8.csv')
+#QTL.lookup <- fread('GTEx_Analysis_2017-06-05_v8_WholeGenomeSeq_838Indiv_Analysis_Freeze.lookup_table.txt.gz', sep="\t")
 
 # get RSID and alleles for remaining SNPs
 QTL.sig$rsid <- QTL.lookup$rs_id_dbSNP151_GRCh38p7[match(QTL.sig$variant_id, QTL.lookup$variant_id)] 
@@ -350,7 +359,7 @@ rm(count.duplicated, count.genes.unique, count.sig, count.snps, count.snps.uniqu
 rm(exposure_data)
 
 write_metadata()
-getwd()
+
 ## hypothalamus
 # info for metadata file
 name <- "GTEx Analysis V8"
@@ -361,7 +370,7 @@ data_descr <-  "Hypothalamus (sampled at Miami Brain Bank and preserved as fresh
 source <- "https://gtexportal.org/home/datasets"
 
 # import data
-QTL <- fread('~/Desktop/files/data/gtexv8/Brain_Hypothalamus.allpairs.txt.gz',sep = '\t')
+QTL <- fread('gtexv8/Brain_Hypothalamus.allpairs.txt.gz',sep = '\t')
 # save counts for metadata file
 count.variants <- dim(QTL)[1] 
 QTL.sig <- subset(QTL, pval_nominal < 5e-8)
@@ -371,7 +380,7 @@ rm(QTL)
 # restart R here
 #QTL.sig <- read.csv('Brain_Hippocampus.allpairs.p5e-8.csv')
 
-QTL.lookup <- fread('~/Desktop/files/data/gtexv8/GTEx_Analysis_2017-06-05_v8_WholeGenomeSeq_838Indiv_Analysis_Freeze.lookup_table.txt.gz', sep="\t")
+QTL.lookup <- fread('GTEx_Analysis_2017-06-05_v8_WholeGenomeSeq_838Indiv_Analysis_Freeze.lookup_table.txt.gz', sep="\t")
 head(QTL.lookup)
 
 # get RSID and alleles for remaining SNPs
@@ -404,6 +413,7 @@ exposure_data <- clump_data(dat = exposure_data, clump_kb = 10000, clump_r2 = 0.
 write.csv(exposure_data, file = 'processed_GTExHypothalamusv8_eQTL.clumped.csv')
 
 clump_data()
+
 # get gene info
 exposure_data$entrez <- toupper(unlist(lapply(strsplit(exposure_data$pos, "-"), '[[' ,1))) 
 exposure_data$entrez <- unlist(lapply(strsplit(exposure_data$entrez, "[.]"), '[[', 1))
@@ -431,19 +441,20 @@ individuals_descr <- "TBC"
 data_descr <-  "Femoral vein; subclavian vein and heart are other possible sites."
 source <- "https://gtexportal.org/home/datasets"
 
-library(data.table)
 # import data
+library(data.table)
 QTL <- fread('~/Desktop/files/data/gtexv8/Whole_Blood.allpairs.txt.gz',sep = '\t')
+
 # save counts for metadata file
 count.variants <- dim(QTL)[1] 
 QTL.sig <- subset(QTL, pval_nominal < 5e-8)
 rm(QTL)
 #.rs.restartR() # remove large QTL file from memory
 #write.csv(QTL.sig, file = 'Brain_Hippocampus.allpairs.p5e-8.csv')
-# restart R here
+
 #QTL.sig <- read.csv('Brain_Hippocampus.allpairs.p5e-8.csv')
 
-QTL.lookup <- fread('~/Desktop/files/data/gtexv8/GTEx_Analysis_2017-06-05_v8_WholeGenomeSeq_838Indiv_Analysis_Freeze.lookup_table.txt.gz', sep="\t")
+QTL.lookup <- fread('gtexv8/GTEx_Analysis_2017-06-05_v8_WholeGenomeSeq_838Indiv_Analysis_Freeze.lookup_table.txt.gz', sep="\t")
 
 # get RSID and alleles for remaining SNPs
 QTL.sig$rsid <- QTL.lookup$rs_id_dbSNP151_GRCh38p7[match(QTL.sig$variant_id, QTL.lookup$variant_id)] 
