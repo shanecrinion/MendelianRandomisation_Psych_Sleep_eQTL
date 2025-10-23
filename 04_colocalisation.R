@@ -46,17 +46,18 @@ outcome_files <-
 
 psychencode_files <- list(headers=c('gene_id', 'gene_chr', 'gene_start', 'gene_end', 'strand', 'number_of_SNPs_tested', 'SNP_distance_to_TSS',
                                     "SNP_id", "SNP_chr", "SNP_start", "SNP_end", "pval_nominal", "beta", "top_SNP"),
-                          gene_mapping='~/Desktop/files/current-projects/eQTL-MR/gencode.v19.genes.v7.patched_contigs.gtf',
-                          snp_info = '~/Desktop/files/data/eqtl/psychencode/SNP_Information_Table_with_Alleles.txt',
-                          coloc_regions='~/Desktop/files/data/eqtl/coloc/top_snps_500kb/psychencode/region_')
+                          gene_mapping='gencode.v19.genes.v7.patched_contigs.gtf',
+                          snp_info = 'SNP_Information_Table_with_Alleles.txt',
+                          coloc_regions='coloc/top_snps_500kb/psychencode/region_')
 
-gtex_files <- list(headers=c('gene_id', 'variant_id', 'tss_distance', 'ma_samples', 'ma_count', 'maf', 'pval_nominal', 'beta', 'se'),
-                   snp_info="~/Desktop/files/data/gtexv8/GTEx_Analysis_2017-06-05_v8_WholeGenomeSeq_838Indiv_Analysis_Freeze.lookup_table.txt.gz",
+gtex_files <- list(headers=c('gene_id', 'variant_id', 'tss_distance', 'ma_samples',
+                             'ma_count', 'maf', 'pval_nominal', 'beta', 'se'),
+                   snp_info="GTEx_Analysis_2017-06-05_v8_WholeGenomeSeq_838Indiv_Analysis_Freeze.lookup_table.txt.gz",
                    gene_mapping="~/Desktop/files/data/gtexv8/gencode.v26.GRCh38.genes.gtf",
-                   cortex="~/Desktop/files/data/eqtl/coloc/top_snps_500kb/gtex_cortex/region_gtexv8cortex_",
-                   blood="~/Desktop/files/data/eqtl/coloc/top_snps_500kb/gtex_wholeblood/region_gtexv8wholeblood_",
-                   hippocampus='~/Desktop/files/data/eqtl/coloc/top_snps_500kb/gtex_hippocampus/region_gtexv8hippocampus_',
-                   hypothalamus='~/Desktop/files/data/eqtl/coloc/top_snps_500kb/gtex_hypothalamus/region_gtexv8hypothalamus_')
+                   cortex="coloc/top_snps_500kb/gtex_cortex/region_gtexv8cortex_",
+                   blood="coloc/top_snps_500kb/gtex_wholeblood/region_gtexv8wholeblood_",
+                   hippocampus='coloc/top_snps_500kb/gtex_hippocampus/region_gtexv8hippocampus_',
+                   hypothalamus='coloc/top_snps_500kb/gtex_hypothalamus/region_gtexv8hypothalamus_')
 
 
 # function to format GWAS data, depending on each file
@@ -119,25 +120,25 @@ format_data <-function(coloc_regions, outcome_data, snp, eqtl, tissue, eqtl_sour
     snp=coloc_regions$rsid,
     #pos=coloc_regions$pos,
     type="quant", sdY=1)
-  str(coloc_list)
+
   check_dataset(coloc_list)
+  
   outcome_list <- list(
     beta=-1*outcome_data[!duplicated(outcome_data$SNP),]$beta,
     varbeta=outcome_data[!duplicated(outcome_data$SNP),]$var,
     snp=outcome_data[!duplicated(outcome_data$SNP),]$SNP,
     pos=outcome_data[!duplicated(outcome_data$SNP),]$pos,
-   # N=outcome_data[!duplicated(outcome_data$SNP),]$N,
-    #pvalues=outcome_data[!duplicated(outcome_data$SNP),]$pval,
     type="cc")
+  
   check_dataset(outcome_list)
+  
   str(outcome_list)
   formatted_data = list(eqtl=coloc_list, outcome=outcome_list)
   return(formatted_data)
 }
-#lookup_file <- fread(gtex_files$snp_info, sep="\t")
-#gtf <- import(gtex_files$gene_mapping)
 
-## create function to perform colocalisation
+
+## Write function to perform colocalisation
 run_coloc <- function(sig_data, tissue, eqtl_source, filtering){
   for(trait in unique(sig_data$outcome)){
   outcome_data <-  process_outcome(subset(sig_data, outcome==trait))
@@ -179,7 +180,6 @@ run_coloc(subset(data, outcome=="Chronotype"), tissue="hypothalamus", eqtl_sourc
 # hippocampus
 data <-read_sheet(
   "https://docs.google.com/spreadsheets/d/1FygOe-3mZynCf1TvKIu_8F8EIfbxgndMpKW_EqbBN7Y/edit?usp=sharing",sheet = "GTEx v8 (hippocampus)")
-unique(data$outcome)
 run_coloc(subset(data, outcome=="SZ"), tissue="hippocampus", eqtl_source = 'gtex', filtering=2)
 run_coloc(subset(data, outcome=="BD"), tissue="hippocampus", eqtl_source = 'gtex', filtering=2)
 run_coloc(subset(data, outcome=="Chronotype"), tissue="hippocampus", eqtl_source = 'gtex', filtering=2)
